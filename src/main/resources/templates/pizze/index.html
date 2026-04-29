@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Pizze</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: main-navbar}"></nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Il Menù della nostra Pizzeria</h1>
+
+        <div class="row my-4">
+            <div class="col-md-6">
+                <form th:action="@{/pizze}" method="GET" class="d-flex">
+                    <input class="form-control me-2" type="search" name="keyword"
+                        placeholder="Cerca una pizza per nome..." th:value="${param.keyword}">
+                    <button class="btn btn-outline-primary" type="submit">Cerca</button>
+                    <a th:href="@{/pizze}" class="btn btn-outline-secondary ms-2">Reset</a>
+                </form>
+            </div>
+
+            <div class="col-md-6 text-end">
+                <a th:href="@{/pizze/create}" class="btn btn-success">Crea Nuova Pizza</a>
+            </div>
+        </div>
+
+        <div th:if="${pizze.size() == 0}" class="alert alert-warning">
+            Al momento non ci sono pizze disponibili. Torna a trovarci!
+        </div>
+
+        <table th:if="${pizze.size() > 0}" class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Immagine</th>
+                    <th>Nome</th>
+                    <th>Prezzo</th>
+                    <th class="text-center">Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pizza : ${pizze}">
+                    <td>
+                        <img th:src="${pizza.urlImmagine}" alt="Foto pizza"
+                            style="width: 80px; height: 60px; object-fit: cover;" class="rounded">
+                    </td>
+                    <td th:text="${pizza.name}">Nome Pizza</td>
+                    <td th:text="${pizza.price} + ' €'">0.00 €</td>
+                    <td class="text-center">
+                        <a th:href="@{/pizze/{id}(id=${pizza.id})}" class="btn btn-info btn-sm">Vedi</a>
+
+                        <a th:href="@{/pizze/edit/{id}(id=${pizza.id})}" class="btn btn-warning btn-sm">Modifica</a>
+
+                        <form th:action="@{/pizze/delete/{id}(id=${pizza.id})}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Sei sicuro di voler eliminare questa pizza?')">
+                                Elimina
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

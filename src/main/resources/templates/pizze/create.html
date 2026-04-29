@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nuova Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-5">
+    <h1>Aggiungi una nuova Pizza</h1>
+
+    <form th:action="@{/pizze/store}" th:object="${pizza}" method="POST">
+
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" th:field="*{name}" class="form-control">
+            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descrizione</label>
+            <textarea th:field="*{description}" class="form-control"></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">URL Immagine</label>
+            <input type="text" th:field="*{urlImmagine}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Prezzo (€)</label>
+            <input type="number" step="0.01" th:field="*{price}" class="form-control">
+            <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ingredienti</label>
+            <div th:each="ing : ${allIngredients}" class="form-check">
+                <input class="form-check-input" type="checkbox" th:value="${ing.id}" th:field="*{ingredients}"
+                    th:id="'ing_' + ${ing.id}">
+                <label class="form-check-label" th:for="'ing_' + ${ing.id}" th:text="${ing.name}"></label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salva Pizza</button>
+        <a th:href="@{/pizze}" class="btn btn-secondary">Annulla</a>
+    </form>
+</body>
+
+</html>

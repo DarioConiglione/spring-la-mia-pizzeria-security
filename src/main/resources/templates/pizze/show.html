@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Dettaglio: ' + ${pizza.name}">Dettaglio Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: main-navbar}"></nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="row g-0">
+                        <div class="col-md-5">
+                            <img th:src="${pizza.urlImmagine}" class="img-fluid rounded-start h-100"
+                                style="object-fit: cover;" th:alt="${pizza.name}" referrerpolicy="no-referrer">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                <h1 class="card-title" th:text="${pizza.name}">Nome Pizza</h1>
+                                <p class="card-text mt-3" th:text="${pizza.description}">Descrizione della pizza...</p>
+
+                                <div class="mt-4">
+                                    <h3>Offerte Speciali</h3>
+                                    <a th:href="@{/offers/create(pizzaId=${pizza.id})}" class="btn btn-primary mb-3">
+                                        Crea nuova offerta speciale
+                                    </a>
+
+                                    <table class="table" th:if="${pizza.specialOffers.size() > 0}">
+                                        <thead>
+                                            <tr>
+                                                <th>Titolo</th>
+                                                <th>Inizio</th>
+                                                <th>Fine</th>
+                                                <th>Azioni</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="offer : ${pizza.specialOffers}">
+                                                <td th:text="${offer.title}"></td>
+                                                <td th:text="${offer.startDate}"></td>
+                                                <td th:text="${offer.endDate}"></td>
+                                                <td>
+                                                    <a th:href="@{/offers/edit/{id}(id=${offer.id})}"
+                                                        class="btn btn-sm btn-warning">Modifica</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p th:unless="${pizza.specialOffers.size() > 0}">Nessuna offerta presente per questa
+                                        pizza.</p>
+                                </div>
+
+                                <h4 class="text-success mt-4" th:text="${pizza.price} + ' €'">0.00 €</h4>
+
+                                <div class="mt-5">
+                                    <a th:href="@{/pizze}" class="btn btn-secondary">Torna al Menù</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
